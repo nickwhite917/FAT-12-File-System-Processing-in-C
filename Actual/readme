@@ -1,0 +1,271 @@
+%% readme.txt
+%% for CIS340 - Project 3 
+
+Name:-		Project 3 - Floppy FAT Processing
+Author:-	Immanuel George - 2548936 - ikp4success@gmail.com
+          Nicholas White - 2578685 - n.j.white@vikes.csuohio.edu
+		      Jason Hindulak - jasonhindu@gmail.com
+		
+Data:-		APRIL 15th, 2015
+
+(1) PROJECT DESCRIPTION
+------------------------
+The purpose of this project was to utilize the C language to mount a floppy image file, and to process the data within the file according to terminal commands received from the user during runtime. The output of these commands is outputted to the console by default, but the output can be redirected. 
+Add additional UNIX commands to the Floppy shell program 
+
+(2) GROUP MEMBER CONTRIBUTION
+------------------------------
+Each group member completed the project on their own time, and then we met to discuss whose worked best. We then compiled our functions, taking some from each program.
+It is important to note that each member had a fully functional, working program before we met to put them together.
+
+Breakdown:
+Immanuel George 33% - Multiple structs as well as multiple floppy functions 
+Nicholas White 33% - Readme, multiple floppy functions
+Jason Hindulak 33% - Makefile, multiple floppy functions
+
+
+(3) COMPILING INSTRUCTION
+--------------------------
+Compilation Description:
+The necessary files which need to be acted on by the compiler are Project2.c, shell.c, and boot.c. These files are compiled using the make command which should show the following:
+
+gcc -std=gnu99 -o flop Project2.c shell.c boot.c -Wall -g -I.
+
+Command Sequence:
+~$make
+~$./flop
+~$make clean
+
+
+(4) SAMPLE TEST RUN
+--------------------
+The following console output shows how to run the program.
+----------------------------------------------------------------------------
+Compilation:
+
+ikp4success@ikp4success-X501A1:~/Documents/CIS340Two/Assignment3/Actual$ make
+    Mounting `imagefile.img`... Done!
+
+
+
+
+Starting the program:
+
+ikp4success@ikp4success-X501A1:~/Documents/CIS340Two/Assignment3/Actual$ ./proj3
+
+Help command:
+
+$ help
+Here are some executable command for the floppy console
+  fmount: mounts the floppy image.
+    Example:    `fmount <image>`
+  fumount: Unmounts a the floppy image.
+    Example:    `fumount`
+  structure: Lists the structure of the floppy disk.
+    Example:    `structure [-l]`
+  traverse: contents within root directory
+    Example:     `traverse [-l]`
+  showfat: FAT tables.
+    Example:    `showfat`
+  showsector: Shows the contents of a sector.
+    Example:    `showsector <number>`
+  help: shows commands.
+    Example:    `help`
+  exit: Exits the flop program.
+    Example:    `quit`
+$ 
+
+fmount command:
+
+$ fmount floppy.txt
+    The floppy image was properly mounted, good job! `floppy.txt`... Done!
+$ 
+
+fumount command:
+
+$ fumount
+    Unmounting the floppy image for you `floppy.txt`... Done!
+$ 
+
+structure command:
+
+$ structure
+        number of FAT:                      2
+        number of sectors used by FAT:      9
+        number of sectors per cluster:      1
+        number of ROOT Entries:             224
+        number of bytes per sector          512
+$ 
+
+structure -l command:
+
+$ structure -l
+        number of FAT:                      2
+        number of sectors used by FAT:      9
+        number of sectors per cluster:      1
+        number of ROOT Entries:             224
+        number of bytes per sector          512
+        ---Sector #---      ---Sector Types---
+             0                    BOOT
+          01 -- 09                FAT0
+          10 -- 18                FAT1
+          18 -- 32                ROOT DIRECTORY
+$ 
+
+traverse command:
+
+[/home/ikp4success/Documents/CIS340Two/Assignment3/Actual]shell$ traverse
+/A       .CLA
+/ALOOP1  .CLA
+/ALOOP1  .JAV
+/ALOOP2  .CLA
+/ALOOP2  .JAV
+/ALOOP3  .CLA
+/ALOOP3  .JAV
+/B       .CLA
+/CONDIT  .CLA
+/CONDIT  .JAV
+/D       .CLA
+/DEMO    .CLA
+/DEMO    .JAV
+/DIR1                           < DIR >
+/DIR1    /.                     < DIR >
+/DIR1    /..                    < DIR >
+/POLYTEST.CLA
+/POLYTEST.JAV
+/SOME    .CLA
+/�OME~1  .JAV
+
+traverse -l command:
+
+$ traverse -l
+    *****************************
+    ** FILE ATTRIBUTE NOTATION **
+    **                         **
+    ** R ------ READ ONLY FILE **
+    ** S ------ SYSTEM FILE    **
+    ** H ------ HIDDEN FILE    **
+    ** A ------ ARCHIVE FILE   **
+    *****************************
+
+-----A    17721 48584       46651      /BARE_ADV.TEX                 3
+-----A    17721 48584       22389      /BARE_C~1.TEX                 95
+-----A    17721 48584       33649      /BARE_J~1.TEX                 139
+-----A    17721 48584       28476      /BARE_J~2.TEX                 205
+------    17721 48659       < DIR >      /CIS340                   261
+------    17721 48659       < DIR >      /CIS340  /.                 261
+------    17721 48659       < DIR >      /CIS340  /..                 0
+$ 
+
+showfat command: (only a portion of the actual output is shown)
+
+        0    1    2    3    4    5    6    7    8    9    a    b    c    d    e    f
+
+   0   f0   ff   ff FREE   40 FREE    5   60 FREE    7   80 FREE    9   a0 FREE    b
+  10   c0 FREE    d   e0 FREE    f FREE    1   11   20    1   13   40    1   15   60
+  20    1   17   80    1   19   a0    1   1b   c0    1   1d   e0    1   1f FREE    2
+  30   21   20    2   23   40    2   25   60    2   27   80    2   29   a0    2   2b
+  40   c0    2   2d   e0    2   2f FREE    3   31   20    3   33   40    3   35   60
+  50    3   37   80    3   39   a0    3   3b   c0    3   3d   e0    3   3f FREE    4
+  60   41   20    4   43   40    4   45   60    4   47   80    4   49   a0    4   4b
+  70   c0    4   4d   e0    4   4f FREE    5   51   20    5   53   40    5   55   60
+  80    5   57   80    5   59   a0    5   5b   c0    5   5d   e0    5   ff    f    6
+  90   61   20    6   63   40    6   65   60    6   67   80    6   69   a0    6   6b
+  a0   c0    6   6d   e0    6   6f FREE    7   71   20    7   73   40    7   75   60
+  b0    7   77   80    7   79   a0    7   7b   c0    7   7d   e0    7   7f FREE    8
+  c0   81   20    8   83   40    8   85   60    8   87   80    8   89   a0    8   ff
+  d0   cf    8   8d   e0    8   8f FREE    9   91   20    9   93   40    9   95   60
+  e0    9   97   80    9   99   a0    9   9b   c0    9   9d   e0    9   9f FREE    a
+  f0   a1   20    a   a3   40    a   a5   60    a   a7   80    a   a9   a0    a   ab
+ 100   c0    a   ad   e0    a   af FREE    b   b1   20    b   b3   40    b   b5   60
+ 110    b   b7   80    b   b9   a0    b   bb   c0    b   bd   e0    b   bf FREE    c
+ 120   c1   20    c   c3   40    c   c5   60    c   c7   80    c   c9   a0    c   cb
+ 130   c0    c   ff   ef    c   cf FREE    d   d1   20    d   d3   40    d   d5   60
+ 140    d   d7   80    d   d9   a0    d   db   c0    d   dd   e0    d   df FREE    e
+ 150   e1   20    e   e3   40    e   e5   60    e   e7   80    e   e9   a0    e   eb
+ 160   c0    e   ed   e0    e   ef FREE    f   f1   20    f   f3   40    f   f5   60
+ 170    f   f7   80    f   f9   a0    f   fb   c0    f   fd   e0    f   ff FREE   10
+ 180    1   21   10    3   41   10   ff   ff   ff    7   81   10    9   a1   10   ff
+ 190   cf   10    d   e1   10    f    1   11   11   21   11   13   41   11   15   61
+ 1a0   11   17   81   11   19   a1   11   1b   c1   11   1d   e1   11   1f    1   12
+ 1b0   21   21   12   23   41   12   ff    f FREE FREE FREE FREE FREE FREE FREE FREE
+
+showsector <num> command:
+
+$ showsector 1
+        0    1    2    3    4    5    6    7    8    9    a    b    c    d    e    f
+
+   0   f0   ff   ff    0   40    0    5   60    0    7   80    0    9   a0    0    b
+  10   c0    0    d   e0    0    f    0    1   11   20    1   13   40    1   15   60
+  20    1   17   80    1   19   a0    1   1b   c0    1   1d   e0    1   1f    0    2
+  30   21   20    2   23   40    2   25   60    2   27   80    2   29   a0    2   2b
+  40   c0    2   2d   e0    2   2f    0    3   31   20    3   33   40    3   35   60
+  50    3   37   80    3   39   a0    3   3b   c0    3   3d   e0    3   3f    0    4
+  60   41   20    4   43   40    4   45   60    4   47   80    4   49   a0    4   4b
+  70   c0    4   4d   e0    4   4f    0    5   51   20    5   53   40    5   55   60
+  80    5   57   80    5   59   a0    5   5b   c0    5   5d   e0    5   ff    f    6
+  90   61   20    6   63   40    6   65   60    6   67   80    6   69   a0    6   6b
+  a0   c0    6   6d   e0    6   6f    0    7   71   20    7   73   40    7   75   60
+  b0    7   77   80    7   79   a0    7   7b   c0    7   7d   e0    7   7f    0    8
+  c0   81   20    8   83   40    8   85   60    8   87   80    8   89   a0    8   ff
+  d0   cf    8   8d   e0    8   8f    0    9   91   20    9   93   40    9   95   60
+  e0    9   97   80    9   99   a0    9   9b   c0    9   9d   e0    9   9f    0    a
+  f0   a1   20    a   a3   40    a   a5   60    a   a7   80    a   a9   a0    a   ab
+ 100   c0    a   ad   e0    a   af    0    b   b1   20    b   b3   40    b   b5   60
+ 110    b   b7   80    b   b9   a0    b   bb   c0    b   bd   e0    b   bf    0    c
+ 120   c1   20    c   c3   40    c   c5   60    c   c7   80    c   c9   a0    c   cb
+ 130   c0    c   ff   ef    c   cf    0    d   d1   20    d   d3   40    d   d5   60
+ 140    d   d7   80    d   d9   a0    d   db   c0    d   dd   e0    d   df    0    e
+ 150   e1   20    e   e3   40    e   e5   60    e   e7   80    e   e9   a0    e   eb
+ 160   c0    e   ed   e0    e   ef    0    f   f1   20    f   f3   40    f   f5   60
+ 170    f   f7   80    f   f9   a0    f   fb   c0    f   fd   e0    f   ff    0   10
+ 180    1   21   10    3   41   10   ff   ff   ff    7   81   10    9   a1   10   ff
+ 190   cf   10    d   e1   10    f    1   11   11   21   11   13   41   11   15   61
+ 1a0   11   17   81   11   19   a1   11   1b   c1   11   1d   e1   11   1f    1   12
+ 1b0   21   21   12   23   41   12   ff    f    0    0    0    0    0    0    0    0
+ 1c0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0
+ 1d0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0
+ 1e0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0
+ 1f0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0
+$ 
+
+
+
+
+
+exit or quit command:
+
+$ exit
+[/home/ikp4success/Documents/CIS340Two/Assignment3/Actual]shell$ exit
+
+
+
+
+----------------------------------------------------------------------------------
+
+
+----------------------------------------------------------------------------------
+
+(5) EXISTING BUGS
+------------------
+If an incorrect img file name is entered, the program cannot handle the user error. Error handling is being added here but is not complete. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
