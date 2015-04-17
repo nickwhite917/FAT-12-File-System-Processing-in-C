@@ -8,6 +8,7 @@
 *   UPDATED:    12-APR-2015
 **/
 
+//System Libraries
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -15,17 +16,19 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #include <fcntl.h>
+
+//Project Libraries
 #include "commands.h"
 #include "processhandling.h"
 
-#define BUFFER_SIZE 1024
+//Macros
+#define BUFFER_SIZE 1024	//Buffer
 
-#define COMMAND_EXECUTE 0
+#define COMMAND_EXECUTE 0	//Command sub-set
 #define COMMAND_QUIT 1
 #define COMMAND_CLEAR 2
 #define COMMAND_PATH_MOD 3
 #define COMMAND_CWD 4
-
 #define FLOP_MOUNT 5
 #define FLOP_UMOUNT 6
 
@@ -34,7 +37,7 @@
 /*
 * Appends a directory to the end of the current PATH.
 */
-void addPath(char *add) {
+void addPath(char *add) { //Aren't we supposed to use 'cd'?
 	char *path = getenv("PATH");
 	char *newpath = malloc(strlen(path) + strlen(add) + 2);
 
@@ -72,14 +75,17 @@ void delPath(char *rem) {
 void printPrompt() {
 	char cwd[BUFFER_SIZE];
 	getcwd(cwd, sizeof(cwd));
-	printf("[\033[1;33m%s\033[0m]shell\033[1;36m$\033[0m ", cwd);
+
+	write(1,"$",sizeof("$"));
+	//printf("[\033[1;33m%s\033[0m]shell\033[1;36m$\033[0m ", cwd);
 }
 
 /*
 * Clears the shell screen.
 */
 void clearScreen() {
-	printf("\033[H\033[J");
+	write(1,"\033[H\033[J",sizeof("\033[H\033[J"));
+	// printf("\033[H\033[J");
 }
 
 /*
@@ -112,6 +118,11 @@ void mountFloppy(char *pathFloppyLoc){
 	if (access(pathFloppyLoc, F_OK) != -1) {
 		mount(pathFloppyLoc);
 	} else {
+		
+		//Can't figure out how to pass variable into write system call...
+		//write(1,"    `",sizeof("    `"));
+		//write(1,&pathFloppyLoc,sizeof(pathFloppyLoc));
+		//write(1,"` does not exist. Please use a valid image.\n",sizeof("` does not exist. Please use a valid image.\n"));
 		printf("    `%s` does not exist. Please use a valid image.\n", pathFloppyLoc);
 	}
 }
@@ -164,8 +175,8 @@ int main(int argc, char** argv){
                     ptr++;
 					delPath(ptr+1);
 				}
-
-                printf("%s\n", getenv("PATH"));
+				write(1,getenv("PATH"),sizeof(getenv("PATH")));
+                //printf("%s\n", getenv("PATH"));
 				break;
 			}
 
@@ -182,6 +193,7 @@ int main(int argc, char** argv){
 				} else {
                     //Change to user defined directory
 					if(chdir(ptr)<0) {
+						//write(1,)
 						printf("Error: No such directory exists [\"%s\"].\n",ptr);
 					}
 				}

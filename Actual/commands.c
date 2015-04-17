@@ -1,17 +1,20 @@
+
+//System Libraries
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "commands.h"
-#include "Fat12BootEntry.h"
 #include <unistd.h>  
 #include <fcntl.h>
-
 #include <errno.h>
 
-//Define global variables
-int img ;
+//Project Libraries
+#include "commands.h"
+#include "Fat12BootEntry.h"
 
-int mounted = 0;
+
+//Define global variables
+int img;    //Image file provided
+int mounted = 0;    //Set to 1 when mounted.
 char *filename = '\0';
 
 //Define FAT12Boot Structure
@@ -21,10 +24,9 @@ Fat12Entry *entry;
 /*
 *   Loads all FAT12 boot information into 'boot' and FAT12 entries into 'entry'
 */
-void load() {
+void load() { //Should this be seek not lseek???
     lseek(img, 11, SEEK_SET); //skip 11 bytes
     //lseek();
-
     //BYTES_PER_SECTOR (2 bytes)
     //fread(&boot.BYTES_PER_SECTOR, 2, 1, img);
     read(img,&boot.BYTES_PER_SECTOR,2);
@@ -153,7 +155,8 @@ void unmount() {
     close(img);
     mounted = 0;
     unload();
-    printf("Done!\n");
+    write(1,"Done!\n",6);
+    //printf("Done!\n");
 }
 
 /*
@@ -167,8 +170,10 @@ void structure(int l) {
     printf("        number of ROOT Entries:             %d\n", boot.MAX_ROOT_DIRS);
     printf("        number of bytes per sector          %d\n", boot.BYTES_PER_SECTOR);
     if (l) {
-        printf("        ---Sector #---      ---Sector Types---\n");
-        printf("             0                    BOOT\n");
+        write(1,"        ---Sector #---      ---Sector Types---\n",47);
+        write(1,"             0                    BOOT\n",39);
+        //printf("        ---Sector #---      ---Sector Types---\n");
+        //printf("             0                    BOOT\n");
 
         for(int i = 0; i < boot.NUM_OF_FATS; i++)
                 printf("          %02d -- %02d                FAT%d\n", (boot.SECTORS_PER_FAT * i) + 1, boot.SECTORS_PER_FAT * (i + 1), i);
@@ -182,16 +187,29 @@ void structure(int l) {
 */
 void traverse(int l) {
     if (l) {
-        printf("    Mounted\n");
-        printf("    *****************************\n");
-        printf("    ** FILE ATTRIBUTE NOTATION **\n");
-        printf("    **                         **\n");
-        printf("    ** R ------ READ ONLY FILE **\n");
-        printf("    ** S ------ SYSTEM FILE    **\n");
-        printf("    ** H ------ HIDDEN FILE    **\n");
-        printf("    ** A ------ ARCHIVE FILE   **\n");
-        printf("    *****************************\n");
-        printf("\n");
+
+        write(1,"    Mounted\n",13);
+        write(1,"    *****************************\n",34);
+        write(1,"    ** FILE ATTRIBUTE NOTATION **\n",34);
+        write(1,"    **                         **\n",34);
+        write(1,"    ** R ------ READ ONLY FILE **\n",34);
+        write(1,"    ** S ------ SYSTEM FILE    **\n",34);
+        write(1,"    ** H ------ HIDDEN FILE    **\n",34);
+        write(1,"    ** A ------ ARCHIVE FILE   **\n",34);
+        write(1,"    *****************************\n",34);
+        write(1,"\n",1);
+
+        //printf("    Mounted\n");
+        //printf("    *****************************\n");
+        //printf("    ** FILE ATTRIBUTE NOTATION **\n");
+        //printf("    **                         **\n");
+        //printf("    ** R ------ READ ONLY FILE **\n");
+        //printf("    ** S ------ SYSTEM FILE    **\n");
+        //printf("    ** H ------ HIDDEN FILE    **\n");
+        //printf("    ** A ------ ARCHIVE FILE   **\n");
+        //printf("    *****************************\n");
+        //printf("\n");
+
         //printf("jsrjkfsksbsf%d\n", boot.MAX_ROOT_DIRS);
         for (int i = 0; i < boot.MAX_ROOT_DIRS; i++) {
             if (entry[i].FILENAME[0] != 0x00 && entry[i].START_CLUSTER != 0) {
@@ -250,7 +268,8 @@ void showfat() {
     printf("        0    1    2    3    4    5    6    7    8    9    a    b    c    d    e    f\n");
     for (int i = 0; i < (boot.NUM_OF_FATS * boot.SECTORS_PER_FAT * boot.BYTES_PER_SECTOR); i++) {
         if (i % 16 == 0 || i == 0) {
-            printf("\n");
+            write(1,"\n",1);
+            //printf("\n");
             printf("%4x", i);
         }
         //fread(&in, 1, 1, img);
@@ -263,14 +282,15 @@ else{
 }
     }
 
-    printf("\n");
+    write(1,"\n",1);
 }
 
 /*
 *   Outputs a hex dump of a specific sector (512 bytes)
 */
 void showsector(int sector) {
-    printf("    Mounted\n");
+    write(1,"    Mounted\n",12);
+   // printf("    Mounted\n");
     unsigned char in;
 
     lseek(img, boot.BYTES_PER_SECTOR * sector, SEEK_SET);
@@ -286,7 +306,7 @@ void showsector(int sector) {
         printf("%5x", in);
     }
 
-    printf("\n");
+    write(1,"\n",1);
 }
 
 /*
@@ -365,6 +385,36 @@ int isMounted() {
 }
 
 void help() {
+    write(1,"Here are some commands supported by the floppy console:\n",70-14);
+    write(1,"\tfumount: Unmounts the floppy images.\n",53-14);
+    write(1,"\t   Example: 'fumount'\n",38-14);
+    write(1,"\tstructure: Lists the structure of the floppy disk.\n",67-14);
+    write(1,"\t   Example: 'structure [-l]'\n",-14);
+    write(1,"\ttraverse: Shows contents with root directory.\n",62-14);
+    write(1,"\t   Example: 'traverse [-l]'\n",44-14);
+    write(1,"\tshowfat: Show FAT tables.\n",42-14);
+    write(1,"\t   Example: 'showfat'\n",38-14);
+    write(1,"\tshowsector: Shows the contents of a sector.\n",60-14);
+    write(1,"\t            Add '> [file]' to create file and save sector info.\n",80-14);
+    write(1,"\t   Example: 'showsector [number]'\n",50-14);
+    write(1,"\t            'showsector [number] > [file]'\n",59-14);
+    write(1,"\thelp: Shows commands.\n",38-14);
+    write(1,"\t   Example: 'help'\n",35-14);
+    write(1,"\texit: Exits the floppy program.\n",48-14);
+    write(1,"\t   Example: 'exit'\n",35-14);
+    write(1,"Here are some common commands that are supported:\n",64-14);
+    write(1,"\tcd: Changes directory.\n",39-14);
+    write(1,"\t   Example: 'cd', 'cd ..', 'cd /home'\n",54-14);
+    write(1,"\tpath: Shows the current pathnames with additional utility to\n",77-14);
+    write(1,"\t      add/remore command searching pathnames\n",61-14);
+    write(1,"\t   Example: 'path'\n",35-14);
+    write(1,"\t            'path +'\n",37-14);
+    write(1,"\t            'path -'\n",37-14);
+    write(1,"\tcmd1 | cmd2: Pipeline command to connect output of cmd1 to input of cmd2\n",89-14);
+    write(1,"\t   Example: 'cmd1 | cmd2'\n",42-14);
+    write(1,"*Floppy program also supports all Linux Shell Commands*\n",70-14);
+    //Wow, that took a while - Nick
+    /*
 	printf("Here are some commands supported by the floppy console:\n");
 	printf("\tfumount: Unmounts the floppy images.\n");
 	printf("\t   Example: 'fumount'\n");
@@ -393,4 +443,5 @@ void help() {
 	printf("\tcmd1 | cmd2: Pipeline command to connect output of cmd1 to input of cmd2\n");
 	printf("\t   Example: 'cmd1 | cmd2'\n");
 	printf("*Floppy program also supports all Linux Shell Commands*\n");
+    */
 } 
