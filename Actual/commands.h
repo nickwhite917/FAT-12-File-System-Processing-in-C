@@ -13,6 +13,7 @@ void showfile(char *file);
 int equals(char *str1, char* str2);
 char *getFile();
 int isMounted();
+void help();
 //bool programlunched = false;
 
 #endif
