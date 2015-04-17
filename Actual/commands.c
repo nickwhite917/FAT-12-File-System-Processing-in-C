@@ -363,3 +363,34 @@ char *getFile() {
 int isMounted() {
     return mounted;
 }
+
+void help() {
+	printf("Here are some commands supported by the floppy console:\n");
+	printf("\tfumount: Unmounts the floppy images.\n");
+	printf("\t   Example: 'fumount'\n");
+	printf("\tstructure: Lists the structure of the floppy disk.\n");
+	printf("\t   Example: 'structure [-l]'\n");
+	printf("\ttraverse: Shows contents with root directory.\n");
+	printf("\t   Example: 'traverse [-l]'\n");
+	printf("\tshowfat: Show FAT tables.\n");
+	printf("\t   Example: 'showfat'\n");
+	printf("\tshowsector: Shows the contents of a sector.\n");
+	printf("\t            Add '> [file]' to create file and save sector info.\n");
+	printf("\t   Example: 'showsector [number]'\n");
+	printf("\t            'showsector [number] > [file]'\n");
+	printf("\thelp: Shows commands.\n");
+	printf("\t   Example: 'help'\n");
+	printf("\texit: Exits the floppy program.\n");
+	printf("\t   Example: 'exit'\n");
+	printf("Here are some common commands that are supported:\n");
+	printf("\tcd: Changes directory.\n");
+	printf("\t   Example: 'cd', 'cd ..', 'cd /home'\n");
+	printf("\tpath: Shows the current pathnames with additional utility to\n");
+	printf("\t      add/remore command searching pathnames\n");
+	printf("\t   Example: 'path'\n");
+	printf("\t            'path +'\n");
+	printf("\t            'path -'\n");
+	printf("\tcmd1 | cmd2: Pipeline command to connect output of cmd1 to input of cmd2\n");
+	printf("\t   Example: 'cmd1 | cmd2'\n");
+	printf("*Floppy program also supports all Linux Shell Commands*\n");
+} 
