@@ -1,11 +1,11 @@
 /**
 *   Name:       Immanuel I George, Nicholas White, Jason Hindulak
-*   Group:      C
-*   Date:       12-APR-2015
-*   Project 3:  Floppy Shell Program
-*   Goal:       Add additional UNIX commands to the Floppy shell program
+*   Group:      ?
+*   Date:       19-APR-2015
+*   Project 3:  Floppy Shell Implementation
+*   Goal:       Add additional UNIX commands to the Floppy Shell project, add inter-process communication functionality.
 *
-*   UPDATED:    12-APR-2015
+*   UPDATED:    19-APR-2015
 **/
 
 //System Libraries
@@ -76,8 +76,9 @@ void printPrompt() {
 	char cwd[BUFFER_SIZE];
 	getcwd(cwd, sizeof(cwd));
 
-	write(1,"$",sizeof("$"));
-	//printf("[\033[1;33m%s\033[0m]shell\033[1;36m$\033[0m ", cwd);
+	printf("[\033[1;33m%s\033[0m]shell\033[1;36m$\033[0m ", cwd);
+	//Or
+	//write(1,"$",sizeof("$"));
 }
 
 /*

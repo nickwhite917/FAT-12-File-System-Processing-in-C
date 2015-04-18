@@ -1,3 +1,12 @@
+/**
+*   Name:       Immanuel I George, Nicholas White, Jason Hindulak
+*   Group:      ?
+*   Date:       19-APR-2015
+*   Project 3:  Floppy Shell Implementation
+*   Goal:       Add additional UNIX commands to the Floppy Shell project, add inter-process communication functionality.
+*
+*   UPDATED:    19-APR-2015
+**/
 
 //System Libraries
 #include <stdio.h>

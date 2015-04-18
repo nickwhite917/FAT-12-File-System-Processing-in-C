@@ -1,6 +1,16 @@
+/**
+*   Name:       Immanuel I George, Nicholas White, Jason Hindulak
+*   Group:      ?
+*   Date:       19-APR-2015
+*   Project 3:  Floppy Shell Implementation
+*   Goal:       Add additional UNIX commands to the Floppy Shell project, add inter-process communication functionality.
+*
+*   UPDATED:    19-APR-2015
+**/
 #ifndef COMMANDS_H
 #define COMMANDS_H
 
+//Loads the actual data from the floppy into the corresponding struct
 void load();
 void unload();
 void mount();
