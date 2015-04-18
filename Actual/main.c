@@ -24,6 +24,8 @@
 //Macros
 #define BUFFER_SIZE 1024	//Buffer
 
+#define clearScreen() write(1,"\033[H\033[J",sizeof("\033[H\033[J"))
+
 #define COMMAND_EXECUTE 0	//Command sub-set
 #define COMMAND_QUIT 1
 #define COMMAND_CLEAR 2
@@ -32,12 +34,16 @@
 #define FLOP_MOUNT 5
 #define FLOP_UMOUNT 6
 
-
-
 /*
 * Appends a directory to the end of the current PATH.
 */
-void addPath(char *add) { //Aren't we supposed to use 'cd'?
+void addPath(char *add) {
+	//Using chdir
+	char *directory = add;
+	int ret;
+	ret = chdir (directory);
+
+	/* Original Code below:
 	char *path = getenv("PATH");
 	char *newpath = malloc(strlen(path) + strlen(add) + 2);
 
@@ -47,12 +53,22 @@ void addPath(char *add) { //Aren't we supposed to use 'cd'?
 	setenv("PATH", newpath, 1);
 
 	free(newpath);
+	*/
 }
 
 /*
 * Deletes all instances of a directory from the PATH.
 */
 void delPath(char *rem) {
+
+	//Testing the following...
+	char *prev = rem;
+	prev = getcwd(prev, 0); /*POSIX.1-2001: will malloc enough memory*/
+	/*fail if prev is NULL, do something*/
+	chdir(prev);
+	free(prev);
+
+	/*
 	char *path = (char *)malloc((sizeof(char) * strlen(getenv("PATH"))) - (sizeof(char) * strlen(rem)));
 	path[0] = '\0';
 	int i = 0; char *p;
@@ -67,6 +83,7 @@ void delPath(char *rem) {
 		}
 	}
 	setenv("PATH", path, 1);
+	*/
 }
 
 /*
@@ -82,12 +99,16 @@ void printPrompt() {
 }
 
 /*
-* Clears the shell screen.
+* WARNING: I removed this function and replaced it with a simple #define clear() at the top
+* - Nick White
+	
+	void clearScreen() {
+		write(1,"\033[H\033[J",sizeof("\033[H\033[J"));
+		// printf("\033[H\033[J");
+	}	
+
 */
-void clearScreen() {
-	write(1,"\033[H\033[J",sizeof("\033[H\033[J"));
-	// printf("\033[H\033[J");
-}
+
 
 /*
 * Processes internal commands that can be handled later.
@@ -134,14 +155,18 @@ void mountFloppy(char *pathFloppyLoc){
 * Main
 */
 int main(int argc, char** argv){
-	clearScreen();
+	clearScreen(); //Clear any existing output in terminal
     addPath(".");
 	size_t buffer = BUFFER_SIZE;
 	char* cmd = (char*)malloc(BUFFER_SIZE);
-	int c = 1;
+
+	//WARNING: Hard-coded, ensure this is in the README. 
 	char* pathFloppyLoc = "imagefile.img";
 	mountFloppy(pathFloppyLoc);
-	while (c) {
+
+	int continueRunning = 1;
+	while (continueRunning) {
+
 		printPrompt();
 		getline(&cmd, &buffer, stdin);
 		char* ptr = cmd;
@@ -158,7 +183,7 @@ int main(int argc, char** argv){
              * EXIT
              */
 			case COMMAND_QUIT: {
-				c = 0;
+				continueRunning = 0;
 				break;
 			}
 
