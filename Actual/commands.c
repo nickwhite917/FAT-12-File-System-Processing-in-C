@@ -125,32 +125,31 @@ void load() { //Should this be seek not lseek???
    // printf("IMG: %d\n", img);
 }
 
-/*
-*   Clears 'boot'
-*/
+//This function clears the boot struct, and entry struct
 void unload() {
-    boot = (Fat12Boot){0};
-    entry = (Fat12Entry *){0};
+    boot = (struct Fat12Boot){0};
+    entry = (struct Fat12Entry *){0};
+    //Old way
+    //boot = (Fat12Boot){0};
+    //entry = (Fat12Entry *){0};
 }
 
 /*
 *   Saves file information and opens the file
 */
 void mount(char *file) {
-    
-    filename = (char *)malloc(strlen(file) + 1);
-    strcpy(filename, file);
+    fn = (char *)malloc(strlen(file) + 1); //WHERE fn is FileName from Project 2
+    strcpy(fn, file);
     img = open(file, O_RDONLY);
     mounted = 1;
     load();
+    write(1,"Done!\n",6);
     //printf("Done!\n");
 }
 
-/*
-*   Clears  file information and closes the file
-*/
+/*Clears file information and closes the file */
 void unmount() {
-    printf("    Unmounting `%s`... ", filename);
+    printf("    Unmounting the floppy image for you `%s`... ", filename);
     filename = '\0';
     close(img);
     mounted = 0;
@@ -259,13 +258,16 @@ void traverse(int l) {
 *   Outputs a hex dump of all FAT tables
 */
 void showfat() {
-    printf("    Mounted\n");
+    write(1,"    Mounted\n",12);
+    //printf("    Mounted\n");
+
     unsigned char in;
     char * free = "FREE";
 
     lseek(img, boot.BYTES_PER_SECTOR, SEEK_SET);
 
     printf("        0    1    2    3    4    5    6    7    8    9    a    b    c    d    e    f\n");
+    write(1,"        0    1    2    3    4    5    6    7    8    9    a    b    c    d    e    f\n",99-14);
     for (int i = 0; i < (boot.NUM_OF_FATS * boot.SECTORS_PER_FAT * boot.BYTES_PER_SECTOR); i++) {
         if (i % 16 == 0 || i == 0) {
             write(1,"\n",1);
