@@ -24,7 +24,7 @@
 //Define global variables
 int img;    //Image file provided
 int mounted = 0;    //Set to 1 when mounted.
-char *filename = '\0';
+char *filename = "";
 
 //Define FAT12Boot Structure
 Fat12Boot boot;
@@ -136,19 +136,16 @@ void load() { //Should this be seek not lseek???
 
 //This function clears the boot struct, and entry struct
 void unload() {
-    boot = (struct Fat12Boot){0};
-    entry = (struct Fat12Entry *){0};
-    //Old way
-    //boot = (Fat12Boot){0};
-    //entry = (Fat12Entry *){0};
+    boot = (Fat12Boot){0};
+    entry = (Fat12Entry *){0};
 }
 
 /*
 *   Saves file information and opens the file
 */
 void mount(char *file) {
-    fn = (char *)malloc(strlen(file) + 1); //WHERE fn is FileName from Project 2
-    strcpy(fn, file);
+    filename = (char *)malloc(strlen(file) + 1); //WHERE fn is FileName from Project 2
+    strcpy(filename, file);
     img = open(file, O_RDONLY);
     mounted = 1;
     load();
