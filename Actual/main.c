@@ -37,11 +37,12 @@
 /*
 * Appends a directory to the end of the current PATH.
 */
-void addPath(char *add) {
+int addPath(char *add) {
 	//Using chdir
 	char *directory = add;
 	int ret;
 	ret = chdir (directory);
+	return ret;
 
 	/* Original Code below:
 	char *path = getenv("PATH");
@@ -156,7 +157,7 @@ void mountFloppy(char *pathFloppyLoc){
 */
 int main(int argc, char** argv){
 	clearScreen(); //Clear any existing output in terminal
-    addPath(".");
+    int addPathResult = addPath(".");
 	size_t buffer = BUFFER_SIZE;
 	char* cmd = (char*)malloc(BUFFER_SIZE);
 
@@ -196,7 +197,7 @@ int main(int argc, char** argv){
 					ptr++;
 				if(*ptr=='+') { //path +
                     ptr++;
-					addPath(ptr+1);
+					int addPathReturn = addPath(ptr+1);
 				} else if(*ptr=='-') { //path -
                     ptr++;
 					delPath(ptr+1);
