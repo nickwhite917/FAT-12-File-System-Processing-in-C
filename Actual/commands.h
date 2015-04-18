@@ -10,20 +10,29 @@
 #ifndef COMMANDS_H
 #define COMMANDS_H
 
-//Loads the actual data from the floppy into the corresponding struct
+//List of commands (according to instructions) which should be part of the child process:
+//help
+//traverse [-l]
+//showsector [sector number]
+//showfat
+
+void help();	//Required
+void traverse(int l);	//Required
+void structure(int l);	//Required
+void showfat();	//Required
+void showsector(int sector);	//Required
+
+//Floppy I/O
 void load();
 void unload();
 void mount();
 void unmount();
-void structure(int l);
-void traverse(int l);
-void showfat();
-void showsector(int sector);
-void showfile(char *file);
+
+//Aux functions
 int equals(char *str1, char* str2);
 char *getFile();
 int isMounted();
-void help();
+
 //bool programlunched = false;
 
 #endif

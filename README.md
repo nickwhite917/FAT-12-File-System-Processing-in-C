@@ -9,7 +9,10 @@ Currently being worked on:
 	Converting printf statements to write system calls. - Nick W
 
 Completed:
+Output redirection works for pwd command, haven't tested for other commands.
 
 
 Not started yet:
+Pipe
+Implementing Floppy commands
 

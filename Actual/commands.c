@@ -317,56 +317,6 @@ void showsector(int sector) {
 
     write(1,"\n",1);
 }
-
-/*
-*   Outputs a hex dump of a specific file
-*/
-// void showfile(char *file) {
-//     printf("    Mounting `%s`... ", file);
-//     char *filename = '\0';
-//     char *ext = '\0';
-//     char *full_filename;
-//     char *p;
-
-//     //Parse filename
-//     p = strtok(file, ".");
-//     if (p)
-//         filename = p;
-
-//     //Parse extension
-//     p = strtok(NULL, ".");
-//     if (p)
-//         ext = p;
-
-//     full_filename = (char *)malloc(strlen(filename) + strlen(ext) + 1);
-//     strcpy(full_filename, filename);
-//     strcat(full_filename, ext);
-
-//     for (int i = 0; i < boot.MAX_ROOT_DIRS; i++) {
-//         if (entry[i].FILENAME != 0x00 && entry[i].START_CLUSTER != 0) { //Ignore invalid files
-//             if(equals(full_filename, (char *)entry[i].FILENAME)) {
-//                 unsigned char in;
-
-//                 //Move to the first byte of the file
-//                 lseek(img, ((boot.MAX_ROOT_DIRS / 16) + (boot.SECTORS_PER_FAT * boot.NUM_OF_FATS) - 1) + (boot.BYTES_PER_SECTOR * entry[i].START_CLUSTER), SEEK_SET);
-
-//                 printf("        0    1    2    3    4    5    6    7    8    9    a    b    c    d    e    f\n");
-//                 for (int j = 0; j < entry[i].FILE_SIZE; j++) {
-//                     if (j % 16 == 0 || j == 0) {
-//                         printf("\n");
-//                         printf("%4x", j);
-//                     }
-//                     //fread(&in, 1, 1, img);
-//                     read(img,&in,1);
-//                     printf("%5x", in);
-//                 }
-
-//                 printf("\n");
-//             }
-//         }
-//     }
-// }
-
 /*
 *   Compares two char*'s exactly
 *   Used for comparing FILENAME's
