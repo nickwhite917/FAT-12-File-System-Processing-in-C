@@ -1,3 +1,12 @@
+/**
+*   Name:       Immanuel I George, Nicholas White, Jason Hindulak
+*   Group:      ?
+*   Date:       19-APR-2015
+*   Project 3:  Floppy Shell Implementation
+*   Goal:       Add additional UNIX commands to the Floppy Shell project, add inter-process communication functionality.
+*
+*   UPDATED:    19-APR-2015
+**/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -16,6 +25,7 @@
 #define FLOP_TRAVERSE 5
 #define FLOP_SHOWFAT 6
 #define FLOP_SHOWFILE 7
+#define FLOP_HELP 8
 
 #define copy_of_str(s) (strcpy((char*)malloc(strlen(s) + 1),s))
 
@@ -256,23 +266,9 @@ void execute_command(command* cmd) {
             }
 			break;
 		}
-
-		/*
-		* SHOWFILE
-		*/
-		// case FLOP_SHOWFILE: {
-  //           if (!isMounted()) {
-  //               printf("    ERROR: no floppy mounted.\n");
-  //               break;
-  //           }
-
-  //           if (cmd->argc == 2) {
-  //               showfile(cmd->argv[1]);
-  //           } else {
-  //               printf("Usage: showfile <file>\n");
-  //           }
-		// 	break;
-  //   	}
+		case FLOP_HELP: {
+			help();
+		}
 
 		/*
 		* DEFAULT: Execute command
