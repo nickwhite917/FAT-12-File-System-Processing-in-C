@@ -1,0 +1,130 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"> 
+<head> 
+<title>CIS 340 (Spring 2015) Project 3</title> 
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" /> 
+<link rel="STYLESHEET" href="../../class.css" type="text/css" /> 
+</head> 
+<body>
+
+<h4>Project3: A Floppy Disk Shell (Due at 11:59:59pm on 04/19/2015 (EST))</h4>
+
+<h4 class="new"><a href="./project3_group.txt">Group Arrangment.</a></h4>
+
+Floppy disk image: <a href="../imagefile.img">Another image file</a>: this image file was used to grade your project2, just for your reference.  However, I may use a different file to grade your project3.
+
+<p class="new">Questions? Please first check our <a href="./proj3_qna.html">FAQ link</a> before you submit your inquiries.</p>
+
+<p>Based on the floppy disk program you have developed in project, you are asked to change the program to a floppy shell that supports Linux shell commands in addition to your existing floppy disk related commands.  You are expected to use C programming language.  
+Your implementation must work on Linux machine in BU004b lab.  </p>
+
+<h4> Required Modules: </h4>
+
+<ol>
+<li>(10 points) Your shell should repeatedly display a prompt and allow 
+the user to enter a command to run.  Your shell is supposed to read the input
+from system standard input, parse the line with command and arguments, and execute.
+You may want to use <tt>fork()</tt> and <tt>exec*()</tt> system calls.
+<ul>
+<li>Your shell should find the build-in command (see part2) in your current working 
+directory first.  If not found, it should search the directories in the shell's
+pathname environment (see part2).</li>
+<li>You are not allowed to use system(), as it invokes the system's /bin/sh shell.
+You should not use <tt>execlp()</tt> or <tt>execvp()</tt>, because your shell has its own path 
+variable (explained in part2).
+<li>By convention, the command arguments are seperated by white spaces.  Please
+describe your customized argument seperation rules in your README document 
+if you have special arrangement (not recommended though).  Your shell does not
+need to handle special characters, like ",", "?", "\", except the redirection
+operators (&lt, &gt) in part3 and the pipeline operator (|) required in part4.</li>
+<li>Given a properly configured searching pathnames (see part2), your shell should be able to run all Linux shell commands, such as ls, pwd, cat, ..., etc.</li>
+<li>If the command cannot be found, a propriate error message must be printed and the shell should be waiting for the next command.</li>
+</ul>
+</li>
+<li>(30 points) Internal commands (running in the main process rather than the child process):
+<ul>
+<li><tt>exit</tt>: to exit the floppy shell.</li>
+<li><tt>cd</tt>: is a command, obviously, to change directories.  You may want to use the chdir system call.</li>
+<li><tt>path</tt>: is not only a command to show the current command searching pathnames 
+(if no argument is provided), but also a utility to modify (either add or remove) the 
+command searching pathnames.  Hint: you must locally maintain a character string 
+to hold the current pathnames, and your main program should be able to modify the 
+string given the commands like "path + ..." or "path - ...". Given any user 
+entered command, as long as it is not an internal command, your program must first 
+determine whether it is a build-in command (the executable can be found in the current
+directory).  If it is not, your program then tries the possible existing shell commands 
+(by using the maintained searching pathnames). If a 
+command is neither a build-in command, nor a shell command, your shell should 
+output an error message.
+<ul>
+<li><tt>path (without arguments)</tt> displays the pathnames currently set.  e.g., "/bin:/sbin"</li>
+<li><tt>path + /abc/def</tt> appends the pathname "/abc/def" to the "path" variable.  e.g., 
+"/bin:/sbin:/abc/def".</li>
+<li><tt>path - /abc/def</tt> removes the pathname "/abc/def" from the "path" variable.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>(20 points) The floppy shell build-in commands (running in the child process):
+<ul>
+<li>help: show the commands supported in the floppy shell, including the build-in commands and the local external commands.</li>
+<li>traverse [-l]: list the content in the root directory. The "-" option is used to list all detailed information, including the file attribution, the last modified time, the size, the full pathname and the starting cluster ID.</li>
+<li>showsector [sector number]: show the contents (in hex dump) of the specified sector number.</li>
+<li>showfat: show the content of FAT table (in the hex dump).</li>
+<li>For all above commands, you may assume the file name "imagefile.img" is 
+equivalent to a floppy disk. That is, you may want to hard code it in your program.</li>
+</ul>
+</li>
+<li>(15 points) I/O output redirection (&gt): your floppy shell should support output redirection.  In particular, if the following command is entered:
+<pre>
+$ flop: showsector 10 &gt myfile
+</pre>
+The screen output will be redirected to a local file named "myfile". This redirection capability should work for all commands that produce screen output in your floppy shell.
+<ul>
+<li>You may want to use open(), close(), dup2() system calls.</li>
+<li>Please refer to Unix <a href="http://en.wikipedia.org/wiki/File_descriptor">file descriptors</a>
+for the mapping of <tt>stdin</tt>, <tt>stdout</tt> and <tt>stderr</tt> to 0, 1, 2.</li>
+<li>Your shell does not need to handle rediction for build-in commands: <tt>exit</tt>, <tt>cd</tt>, 
+<tt>path</tt>.</li>
+</ul>
+</li>
+<li>(20 points) Extend you shell with <a href="http://en.wikipedia.org/wiki/Pipeline_%28Unix%29">
+pipeline (|)</a>.  Given the following command, 
+<pre>$ cmd1 | cmd2 </pre> 
+the standard output
+of <tt>cmd1</tt> is connected to the standard input of <tt>cmd2</tt>.
+<ul>
+<li>You may want to use <tt>pipe()</tt> system call.</li>
+</ul>
+</li>
+<li>(10 points) This is optional (as a bonus) for undergrads, but is required for grads.  Further extend your shell to support a mixture of pipelines and redirections like
+the following examples: 
+<pre>
+$ cmd1 | cmd2 > file1
+</pre>
+</li>
+
+<li>Provide a Makefile so <tt>make</tt> command would produce the executable.</li>
+<li>
+(5 points) Readme: you are required to write a README document (TXT only) that
+describes your project design detail and the execution sequence (with the commands).
+In particular, please explicitly state which part, if there is any, does not work and 
+the possible reasons why that module does not work.  For those working modules, please give
+a brief (in short) sample output.
+</li>
+
+
+</ol>
+
+
+
+</ol>
+
+<h4>Submission:</h4>
+<ul>
+<li>Create a folder with the name of your assigned group name, e.g., Group_A.</li>
+<li>Copy all source code files/directories into the created folder.</li>
+<li>Make sure you have sshed to grail.cba.csuohio.edu, in the parent directory of your folder, then type:<br> 
+<tt> $ turnin -c cis340w -p proj3 Group_A</tt></li>
+</ul>
+</body>
+</hmtl>
