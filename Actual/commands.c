@@ -144,6 +144,7 @@ void unload() {
 *   Saves file information and opens the file
 */
 void mount(char *file) {
+    write(1,"Mounting the floppy for you now...\n",35);
     filename = (char *)malloc(strlen(file) + 1); //WHERE fn is FileName from Project 2
     strcpy(filename, file);
     img = open(file, O_RDONLY);
