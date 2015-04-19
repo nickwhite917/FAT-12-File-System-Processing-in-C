@@ -39,13 +39,15 @@
 */
 void addPath(char *add) {
 	//Using chdir
+	/*
 	char *directory = add;
 	int ret;
 	ret = chdir (directory);
 	if(0 != ret){
 		write(1,"chdir system call failed!",43-18);
 	}
-	/* Original Code below:
+	*/
+	
 	char *path = getenv("PATH");
 	char *newpath = malloc(strlen(path) + strlen(add) + 2);
 
@@ -55,7 +57,7 @@ void addPath(char *add) {
 	setenv("PATH", newpath, 1);
 
 	free(newpath);
-	*/
+
 }
 
 /*
