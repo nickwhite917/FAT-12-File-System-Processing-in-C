@@ -268,6 +268,7 @@ void execute_command(command* cmd) {
 		}
 		case FLOP_HELP: {
 			help();
+			break;
 		}
 
 		/*

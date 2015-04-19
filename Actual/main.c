@@ -65,14 +65,15 @@ void addPath(char *add) {
 */
 void delPath(char *rem) {
 
-	/*Testing the following...
+	printf(&rem);
+
 	char *prev = rem;
 	prev = getcwd(prev, 0);
 
 	chdir(prev);
 	free(prev);
-	*/
 
+	/*
 	char *path = (char *)malloc((sizeof(char) * strlen(getenv("PATH"))) - (sizeof(char) * strlen(rem)));
 	path[0] = '\0';
 	int i = 0; char *p;
@@ -87,7 +88,7 @@ void delPath(char *rem) {
 		}
 	}
 	setenv("PATH", path, 1);
-
+	*/
 }
 
 /*
