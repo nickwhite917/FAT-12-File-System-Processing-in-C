@@ -65,8 +65,6 @@ void addPath(char *add) {
 */
 void delPath(char *rem) {
 
-	printf(&rem);
-
 	char *prev = rem;
 	prev = getcwd(prev, 0);
 
