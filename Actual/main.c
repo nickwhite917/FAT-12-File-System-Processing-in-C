@@ -65,9 +65,8 @@ void delPath(char *rem) {
 
 	/*Testing the following...
 	char *prev = rem;
-	prev = getcwd(prev, 0); /*POSIX.1-2001: will malloc enough memory*/
-	/*fail if prev is NULL, do something*/
-	
+	prev = getcwd(prev, 0);
+
 	chdir(prev);
 	free(prev);
 	*/
