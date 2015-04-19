@@ -386,7 +386,7 @@ int process_floppy_command(char *cmd) {
         return FLOP_SHOWFAT;
     }
     if (strstr(cmd, "help") == cmd) {
-        return FLOP_help;
+        return FLOP_HELP;
     }
     return COMMAND_EXECUTE;
 }
